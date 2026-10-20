@@ -207,7 +207,21 @@ Jobs depend on each other (`needs:`), every step runs under `bash -eo pipefail`,
 quality gate turns a model regression into a failing test, so **any code, test or model
 error produces a red build with the failing step's log**.
 
-> _[Add: screenshot of a green workflow run (all 4 jobs) and of the run's artifacts list.]_
+**Evidence.** The first runs on GitHub: two green runs on `main`, and one run on a
+throw-away branch `ci-failure-demo` that contained a deliberate bug (the target was set to 1
+for every patient).
+
+<img src="../screenshots/ci/01_workflow_runs.png" alt="Workflow runs" width="85%">
+
+A green run: all four jobs pass and upload the `test-results` and `trained-model` artifacts.
+
+<img src="../screenshots/ci/02_green_run_with_artifacts.png" alt="Green run with artifacts" width="80%">
+
+The failure demo: `test_target_is_binary` caught the bug, the **Unit tests** job failed with
+exit code 1, and **Train model** and **Docker build were skipped**, so a broken commit can
+never produce a model or an image.
+
+<img src="../screenshots/ci/03_failed_run_tests_block_pipeline.png" alt="Failed run" width="85%">
 
 ## 9. Model containerisation
 

@@ -57,3 +57,11 @@ Terminal output captured while running each command; every capture starts with
 | `step8_prometheus_targets.png` | Prometheus scraping both API pods (2/2 up) |
 | `step8_prometheus_graph.png` | `/predict` request rate per pod in Prometheus |
 | `step8_grafana_dashboard.png` | Grafana dashboard: predictions, errors, latency, confidence, per-pod traffic |
+
+## ci/ (Step 5, GitHub Actions)
+| File | Shows |
+|---|---|
+| `01_workflow_runs.png` | the workflow runs: two green runs on `main`, one red run on `ci-failure-demo` |
+| `02_green_run_with_artifacts.png` | lint -> tests -> train + Docker all green, with `test-results` and `trained-model` artifacts |
+| `03_failed_run_tests_block_pipeline.png` | deliberate bug: unit tests fail (exit code 1), training and Docker jobs skipped |
+| `04_failed_job_steps.png` | the failing job: the "Run tests" step failed |
