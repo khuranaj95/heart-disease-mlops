@@ -83,3 +83,32 @@ jobs:
             report/tuning/
             screenshots/models/
             training-log.txt
+
+  docker:
+    name: Build and test Docker image
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t heart-disease-api:ci .
+      - name: Start container
+        run: docker run -d --name api -p 8000:8000 heart-disease-api:ci
+      - name: Wait for /health
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf localhost:8000/health && exit 0
+            sleep 1
+          done
+          docker logs api
+          exit 1
+      - name: Call /predict with a sample patient
+        run: |
+          curl -sf -X POST localhost:8000/predict \
+            -H "Content-Type: application/json" \
+            -d '{"age":67,"sex":1,"cp":4,"trestbps":160,"chol":286,"fbs":0,"restecg":2,"thalach":108,"exang":1,"oldpeak":1.5,"slope":2,"ca":3,"thal":3}' \
+            | tee predict-response.json
+          grep -q '"prediction":1' predict-response.json
+      - name: Show container logs
+        if: always()
+        run: docker logs api

@@ -1,0 +1,9 @@
+# Minimal pinned libraries for the API container (no Jupyter/MLflow/test tools).
+# Versions match requirements.txt so the model loads with the same scikit-learn it was trained with.
+fastapi==0.151.0
+uvicorn==0.54.0
+prometheus_client==0.26.0
+scikit-learn==1.9.1
+pandas==3.0.6
+numpy==2.5.4
+joblib==1.6.0

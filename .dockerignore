@@ -1,0 +1,13 @@
+# Keep the build context small: only src/, models/ and requirements-serve.txt are needed
+.git
+.venv
+.github
+mlruns
+data
+notebooks
+screenshots
+report
+tests
+scripts
+**/__pycache__
+.env
