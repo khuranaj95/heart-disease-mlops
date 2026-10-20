@@ -1,0 +1,11 @@
+# Virtual environment and Python caches
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Secrets must never be committed
+.env
+
+# MLflow local tracking files (added in Step 3)
+mlruns/

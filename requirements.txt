@@ -1,0 +1,8 @@
+# Pinned versions so every run (local, CI, Docker) uses the same libraries.
+pandas==3.0.6
+numpy==2.5.4
+matplotlib==3.11.2
+seaborn==0.13.2
+scikit-learn==1.9.1
+ucimlrepo==0.0.7
+jupyter==1.1.1
