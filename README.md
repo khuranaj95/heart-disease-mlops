@@ -10,10 +10,17 @@ scripts/download_data.py   download the raw dataset from UCI
 src/preprocess.py          clean data, binary target -> data/processed/
 src/features.py            preprocessing ColumnTransformer (scaling + one-hot)
 src/train.py               tune + compare models, log to MLflow, save best model
+src/predict.py             load the saved model and predict (CLI + used by the API)
+src/api.py                 FastAPI service: /predict, /health, /metrics
+tests/                     21 pytest unit tests (data, features, model, API)
+.github/workflows/ci.yml   GitHub Actions: lint -> test -> train, Docker build + smoke test
+Dockerfile                 API container (uses requirements-serve.txt)
+k8s/                       Minikube deployment + LoadBalancer service
+k8s/monitoring/            Prometheus + Grafana (dashboard preconfigured)
 notebooks/01_eda.ipynb     exploratory data analysis
 data/raw/, data/processed/ raw and cleaned CSVs (committed)
 models/                    saved best pipeline + metadata.json
-report/                    model selection write-up, tuning tables, final report
+report/                    final report (report.md / report.pdf), model selection, tuning tables
 screenshots/               plots and screenshots used in the report
 ```
 
@@ -63,3 +70,44 @@ nested child run for every grid-search setting tried.
 | Random Forest | 0.902 | 0.774 | 0.948 | 0.893 |
 
 Why Logistic Regression was chosen: [report/model_selection.md](report/model_selection.md).
+
+## Tests and linting
+```bash
+ruff check . && ruff format --check .
+python -m pytest -v
+python -m src.predict data/sample_request.json
+```
+
+## Run the API with Docker
+```bash
+docker build -t heart-disease-api:1.0 .
+docker run -p 8000:8000 heart-disease-api:1.0
+curl -X POST localhost:8000/predict -H "Content-Type: application/json" \
+  -d '{"age":67,"sex":1,"cp":4,"trestbps":160,"chol":286,"fbs":0,"restecg":2,"thalach":108,"exang":1,"oldpeak":1.5,"slope":2,"ca":3,"thal":3}'
+# -> {"prediction":1,"label":"disease","confidence":0.9856,"probability_disease":0.9856}
+```
+Interactive API docs: http://localhost:8000/docs
+
+## Deploy to Minikube
+```bash
+minikube start --driver=docker
+minikube image load heart-disease-api:1.0
+kubectl apply -f k8s/                     # deployment (2 replicas) + LoadBalancer service
+minikube tunnel                           # in a second terminal: assigns the external IP
+kubectl get svc heart-disease-api         # EXTERNAL-IP, port 80
+minikube service heart-disease-api --url  # alternative URL without the tunnel
+```
+
+## Monitoring
+```bash
+kubectl apply -f k8s/monitoring/
+minikube service prometheus --url         # Prometheus (targets, queries)
+minikube service grafana --url            # Grafana -> "Heart Disease API" dashboard
+```
+The API logs one JSON line per request (`kubectl logs deployment/heart-disease-api`) and
+exposes Prometheus metrics at `/metrics`.
+
+## Report
+`report/report.md` (source) and `report/report.pdf`. Rebuild the PDF with
+`python scripts/build_report.py` (needs Firefox); redraw the architecture diagram with
+`python scripts/draw_architecture.py`.

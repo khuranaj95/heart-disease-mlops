@@ -35,3 +35,25 @@ Terminal output captured while running each command; every capture starts with
 | `04_artifact_roc_curve.png` | ROC curve logged as an artifact |
 | `05_artifact_confusion_matrix.png` | confusion matrix logged as an artifact |
 | `06_artifact_tuning_csv.png` | full grid-search results logged as an artifact |
+
+## docker/ (Step 6)
+| File | Shows |
+|---|---|
+| `step6_docker_build.png` | `docker build` and the resulting image |
+| `step6_docker_run.png` | container started, `/health`, two `/predict` calls, a rejected invalid request, `(healthy)` status |
+| `step6_swagger_predict.png` | `/predict` executed from the Swagger UI (`/docs`) |
+
+## kubernetes/ (Step 7)
+| File | Shows |
+|---|---|
+| `step7_k8s_deploy.png` | Minikube status, `kubectl apply`, rollout, deployment/pods/service with EXTERNAL-IP |
+| `step7_k8s_endpoints.png` | `/health` and `/predict` through the LoadBalancer IP and `minikube service` URL; requests split across both pods |
+
+## monitoring/ (Step 8)
+| File | Shows |
+|---|---|
+| `step8_request_logs_and_metrics.png` | JSON request logs and `/metrics` output from the Docker container |
+| `step8_k8s_logs.png` | the same logs and metrics from the Kubernetes pods |
+| `step8_prometheus_targets.png` | Prometheus scraping both API pods (2/2 up) |
+| `step8_prometheus_graph.png` | `/predict` request rate per pod in Prometheus |
+| `step8_grafana_dashboard.png` | Grafana dashboard: predictions, errors, latency, confidence, per-pod traffic |

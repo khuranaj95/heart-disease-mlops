@@ -17,3 +17,6 @@ prometheus_client==0.26.0
 pytest==9.1.1
 ruff==0.17.1
 httpx==0.28.1
+# Report building (Step 9: scripts/build_report.py, also needs Firefox)
+markdown==3.11.2
+selenium==4.51.0
