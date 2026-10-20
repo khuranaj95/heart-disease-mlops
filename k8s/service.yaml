@@ -1,0 +1,15 @@
+# Exposes the API pods behind one stable address with load balancing.
+apiVersion: v1
+kind: Service
+metadata:
+  name: heart-disease-api
+  labels:
+    app: heart-disease-api
+spec:
+  type: LoadBalancer # on Minikube, reach it with "minikube service" or "minikube tunnel"
+  selector:
+    app: heart-disease-api # send traffic to every pod with this label
+  ports:
+    - name: http
+      port: 80 # port of the service
+      targetPort: 8000 # port the container listens on
