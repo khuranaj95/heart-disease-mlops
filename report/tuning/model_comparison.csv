@@ -1,0 +1,5 @@
+model,split,accuracy,precision,recall,roc_auc
+logistic_regression,cv,0.847,0.877,0.783,0.902
+logistic_regression,test,0.885,0.839,0.929,0.966
+random_forest,cv,0.81,0.81,0.774,0.902
+random_forest,test,0.852,0.806,0.893,0.948
