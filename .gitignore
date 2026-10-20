@@ -9,3 +9,6 @@ __pycache__/
 
 # MLflow local tracking files (added in Step 3)
 mlruns/
+
+# Local assistant configuration (not part of the project)
+CLAUDE.md
