@@ -1,7 +1,7 @@
 # Heart Disease Prediction: End-to-End MLOps Pipeline
 
 **Course:** Machine Learning Operations (AIMLCZG523), Assignment 1  
-**Student:** _&lt;your name&gt;_ (2025AE05141)  
+**Student:** Jagriti Khurana (2025AE05141)  
 **Repository:** <https://github.com/khuranaj95/heart-disease-mlops>  
 **Environment:** BITS Prayogshala Linux server, Python 3.12.9, Docker 28, Minikube (Kubernetes v1.32)
 
