@@ -1,0 +1,17 @@
+# Tool settings for pytest and ruff (the linter used in CI)
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]          # so tests can "import src.xxx" from the repo root
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]   # pycodestyle errors/warnings, pyflakes, import order
+
+[tool.ruff.lint.per-file-ignores]
+# matplotlib.use("Agg") must run before pyplot is imported
+"src/train.py" = ["E402"]

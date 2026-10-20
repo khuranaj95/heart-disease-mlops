@@ -3,6 +3,7 @@
 The same preprocessor is used during training and inside the saved model,
 so the API applies exactly the same transformations as training did.
 """
+
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline

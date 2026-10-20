@@ -3,6 +3,7 @@
 Usage (from the repo root):
     python scripts/download_data.py
 """
+
 from pathlib import Path
 
 from ucimlrepo import fetch_ucirepo

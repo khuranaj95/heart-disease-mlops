@@ -3,6 +3,7 @@
 Usage (from the repo root):
     python -m src.train
 """
+
 import json
 import os
 import platform
@@ -67,7 +68,7 @@ CANDIDATES = {
 }
 
 
-def test_metrics(pipeline, X_test, y_test) -> dict:
+def evaluate_on_test(pipeline, X_test, y_test) -> dict:
     """Score a fitted pipeline on the held-out test set."""
     y_pred = pipeline.predict(X_test)
     y_proba = pipeline.predict_proba(X_test)[:, 1]  # probability of disease
@@ -126,7 +127,7 @@ def train_one(name, spec, X_train, y_train, X_test, y_test) -> dict:
     # Mean cross-validation score of the best settings, for every metric
     i = search.best_index_
     cv_scores = {m: search.cv_results_[f"mean_test_{m}"][i] for m in SCORING}
-    test_scores = test_metrics(best, X_test, y_test)
+    test_scores = evaluate_on_test(best, X_test, y_test)
 
     # Full grid results: one row per setting tried, sorted best first.
     # Saved to report/ so the tuning process is documented in the repo.
@@ -151,9 +152,7 @@ def train_one(name, spec, X_train, y_train, X_test, y_test) -> dict:
             with mlflow.start_run(run_name=f"{name}_grid_{i:02d}", nested=True):
                 mlflow.log_param("model_type", name)
                 mlflow.log_params(short)
-                mlflow.log_metrics(
-                    {f"cv_{m}": search.cv_results_[f"mean_test_{m}"][i] for m in SCORING}
-                )
+                mlflow.log_metrics({f"cv_{m}": search.cv_results_[f"mean_test_{m}"][i] for m in SCORING})
                 mlflow.log_metric("rank", search.cv_results_["rank_test_roc_auc"][i])
 
         # The parent run holds the best setting and its final evaluation
